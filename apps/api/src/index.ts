@@ -7,6 +7,8 @@ import { policyRoutes } from "./routes/policy.js";
 import { scoringRoutes } from "./routes/scoring.js";
 import { contentRoutes } from "./routes/content.js";
 import { publisherRoutes } from "./routes/publisher.js";
+import { jobRoutes } from "./routes/jobs.js";
+import { startWorker } from "./jobs/worker.js";
 
 const app = Fastify({ logger: true });
 const prisma = new PrismaClient();
@@ -18,6 +20,7 @@ await app.register(policyRoutes);
 await app.register(scoringRoutes);
 await app.register(contentRoutes);
 await app.register(publisherRoutes);
+await app.register(jobRoutes);
 
 app.get("/health", async () => ({ ok: true, service: "casino-outreach-agent" }));
 
@@ -34,3 +37,4 @@ app.post("/api/projects", async (request, reply) => {
 
 const port = Number(process.env.PORT ?? 4000);
 await app.listen({ port, host: "0.0.0.0" });
+startWorker();
