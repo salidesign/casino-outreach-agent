@@ -1,1 +1,21 @@
-{"name":"casino-outreach-agent","private":true,"version":"0.1.0","workspaces":["apps/*","packages/*"],"scripts":{"dev":"npm run dev -w apps/api","build":"npm run build -ws","typecheck":"npm run typecheck -ws","prisma:generate":"prisma generate","prisma:migrate":"prisma migrate dev"},"devDependencies":{"typescript":"^5.6.3","tsx":"^4.19.1","prisma":"^6.16.0"}}
+{
+  "name": "casino-outreach-agent",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w apps/api",
+    "build": "npm run build -ws",
+    "typecheck": "npm run typecheck -ws",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.1",
+    "prisma": "^6.16.0"
+  }
+}
