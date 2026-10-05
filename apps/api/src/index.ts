@@ -8,7 +8,7 @@ import { scoringRoutes } from "./routes/scoring.js";
 import { contentRoutes } from "./routes/content.js";
 import { publisherRoutes } from "./routes/publisher.js";
 import { jobRoutes } from "./routes/jobs.js";
-import { startWorker } from "./jobs/worker.js";
+import { startBullWorker } from "./jobs/bull-worker.js";
 
 const app = Fastify({ logger: true });
 const prisma = new PrismaClient();
@@ -37,4 +37,4 @@ app.post("/api/projects", async (request, reply) => {
 
 const port = Number(process.env.PORT ?? 4000);
 await app.listen({ port, host: "0.0.0.0" });
-startWorker();
+startBullWorker();
