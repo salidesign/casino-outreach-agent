@@ -1,4 +1,5 @@
 import { dequeue } from "./queue.js";
+import { runPipelineJob } from "./pipeline-worker.js";
 
 let running=false;
 
@@ -6,12 +7,15 @@ export function startWorker() {
   if (running) return;
   running=true;
 
-  setInterval(() => {
+  setInterval(async () => {
     const job=dequeue();
     if (!job) return;
 
-    // Execution is intentionally separated from queueing.
-    // Wire real agents here as the production worker evolves.
-    console.log("[worker] processing", job.type, job.id);
+    try {
+      const result=await runPipelineJob(job.type, job.payload);
+      console.log("[worker] completed", job.type, job.id, result);
+    } catch (error) {
+      console.error("[worker] failed", job.type, job.id, error);
+    }
   }, 1000);
 }
