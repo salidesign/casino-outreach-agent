@@ -6,6 +6,7 @@ import { discoveryRoutes } from "./routes/discovery.js";
 import { policyRoutes } from "./routes/policy.js";
 import { scoringRoutes } from "./routes/scoring.js";
 import { contentRoutes } from "./routes/content.js";
+import { publisherRoutes } from "./routes/publisher.js";
 
 const app = Fastify({ logger: true });
 const prisma = new PrismaClient();
@@ -16,6 +17,7 @@ await app.register(discoveryRoutes);
 await app.register(policyRoutes);
 await app.register(scoringRoutes);
 await app.register(contentRoutes);
+await app.register(publisherRoutes);
 
 app.get("/health", async () => ({ ok: true, service: "casino-outreach-agent" }));
 
