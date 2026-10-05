@@ -4,6 +4,7 @@ import sensible from "@fastify/sensible";
 import { PrismaClient } from "@prisma/client";
 import { discoveryRoutes } from "./routes/discovery.js";
 import { policyRoutes } from "./routes/policy.js";
+import { scoringRoutes } from "./routes/scoring.js";
 
 const app = Fastify({ logger: true });
 const prisma = new PrismaClient();
@@ -12,6 +13,7 @@ await app.register(cors, { origin: true });
 await app.register(sensible);
 await app.register(discoveryRoutes);
 await app.register(policyRoutes);
+await app.register(scoringRoutes);
 
 app.get("/health", async () => ({ ok: true, service: "casino-outreach-agent" }));
 
