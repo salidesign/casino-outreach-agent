@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+enum OpportunityStatus { NEW REVIEW APPROVED REJECTED PUBLISHED }
+enum PublicationStatus { PENDING PUBLISHED FAILED }
+
+model Project {
+  id String @id @default(cuid())
+  name String
+  website String
+  topics Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  domains Domain[]
+  opportunities Opportunity[]
+}
+model Domain {
+  id String @id @default(cuid())
+  hostname String @unique
+  policy SitePolicy?
+  pages Page[]
+  createdAt DateTime @default(now())
+}
+model Page {
+  id String @id @default(cuid())
+  domainId String
+  url String @unique
+  title String?
+  contentHash String?
+  contentText String?
+  crawledAt DateTime?
+  domain Domain @relation(fields:[domainId], references:[id], onDelete:Cascade)
+}
+model SitePolicy {
+  id String @id @default(cuid())
+  domainId String @unique
+  allowsSelfPromotion Boolean @default(false)
+  allowsExternalLinks Boolean @default(false)
+  requiresDisclosure Boolean @default(false)
+  requiresModerator Boolean @default(false)
+  notes String?
+  checkedAt DateTime @default(now())
+  domain Domain @relation(fields:[domainId], references:[id], onDelete:Cascade)
+}
+model Opportunity {
+  id String @id @default(cuid())
+  projectId String
+  url String
+  title String?
+  relevanceScore Int @default(0)
+  policyScore Int @default(0)
+  riskScore Int @default(0)
+  status OpportunityStatus @default(NEW)
+  reason String?
+  project Project @relation(fields:[projectId], references:[id], onDelete:Cascade)
+  contents GeneratedContent[]
+  publications Publication[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model GeneratedContent {
+  id String @id @default(cuid())
+  opportunityId String
+  body String
+  includesLink Boolean @default(false)
+  approved Boolean @default(false)
+  createdAt DateTime @default(now())
+  opportunity Opportunity @relation(fields:[opportunityId], references:[id], onDelete:Cascade)
+}
+model Publication {
+  id String @id @default(cuid())
+  opportunityId String
+  status PublicationStatus @default(PENDING)
+  publishedUrl String?
+  error String?
+  createdAt DateTime @default(now())
+  opportunity Opportunity @relation(fields:[opportunityId], references:[id], onDelete:Cascade)
+}
